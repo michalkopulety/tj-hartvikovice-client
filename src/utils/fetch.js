@@ -1,19 +1,31 @@
-import { getPath } from "./query";
+import {
+    getPath
+} from "./query";
 
 const parseResponse = async (response) => {
     return await response.json()
 };
 
 export const getPlayers = async (params) => {
-    return await client("players", params || {});
+    return await client("api/players", params || {});
 };
 
-export const getTrainings = async(params)=> {
-    return await client("trainings", params || {});
+export const getTrainings = async (params) => {
+    return await client("api/trainings", params || {});
 };
 
-export const client = async (path, {body, filter, expand, sort, ...customConfig}) => {
-    let url = getPath(path, {filter, expand, sort});
+export const client = async (path, {
+    body,
+    filter,
+    expand,
+    sort,
+    ...customConfig
+}) => {
+    let url = getPath(path, {
+        filter,
+        expand,
+        sort
+    });
 
     const config = {
         method: body ? "POST" : "GET",
@@ -25,13 +37,13 @@ export const client = async (path, {body, filter, expand, sort, ...customConfig}
     };
 
     if (body) {
-        config.body= JSON.stringify(body);
+        config.body = JSON.stringify(body);
     }
-    
+
     try {
         let response = await fetch(url, config);
         return await parseResponse(response);
-    } catch(error) {
+    } catch (error) {
         throw new Error("Fetch failed");
     }
 };
