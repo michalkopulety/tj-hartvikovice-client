@@ -11,7 +11,6 @@ const Request = require('../utils/Request');
 let model = new Request(trainingSchema);
 // CREATE Student
 router.route('/create-training').post((req, res, next) => {
-
     trainingSchema.create(req.body, (error, data) => {
         if (error) {
             return next(error)

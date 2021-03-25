@@ -27,7 +27,7 @@ export const getPlayers = createAsyncThunk(
 export const getPlayerById = createAsyncThunk(
   "players/getPlayerById",
   async (id) => {
-    let response = await client(`players/edit-player/${id}`, {});
+    let response = await client(`api/players/edit-player/${id}`, {});
     return {
       player: response,
       id: response._id
