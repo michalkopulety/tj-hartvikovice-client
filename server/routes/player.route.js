@@ -4,9 +4,11 @@ let mongoose = require('mongoose'),
 
 // Student Model
 let playerSchema = require('../models/Player');
+const Request = require('../utils/Request');
+let model = new Request(playerSchema);
 
-// CREATE Student
-router.route('/create-player').post((req, res, next) => {
+// CREATE player
+router.route('/').post((req, res, next) => {
     playerSchema.create(req.body, (error, data) => {
         if (error) {
             return next(error)
@@ -17,21 +19,18 @@ router.route('/create-player').post((req, res, next) => {
     })
 });
 
-// READ Students
-router.route('/').get((req, res) => {
-    playerSchema.find()
-        .populate('trainings')
-        .exec((error, data) => {
-            if (error) {
-                return next(error)
-            } else {
-                res.json(data)
-            }
-        })
+// READ players
+router.route('/').get(async (req, res) => {
+    try {
+        let data = await model.applyQuery(playerSchema.find({}), req.query);
+        res.json(data);
+    } catch (err) {
+        return next(err);
+    }
 })
 
-// Get Single Student
-router.route('/edit-player/:id').get((req, res) => {
+// Get Single player
+router.route('/:id').get((req, res) => {
     playerSchema.findById(req.params.id, (error, data) => {
         if (error) {
             return next(error)
@@ -42,8 +41,8 @@ router.route('/edit-player/:id').get((req, res) => {
 })
 
 
-// Update Student
-router.route('/update-player/:id').put((req, res, next) => {
+// Update player
+router.route('/:id').put((req, res, next) => {
     playerSchema.findByIdAndUpdate(req.params.id, {
         $set: req.body
     }, (error, data) => {
@@ -57,8 +56,8 @@ router.route('/update-player/:id').put((req, res, next) => {
     })
 })
 
-// Delete Student
-router.route('/delete-player/:id').delete((req, res, next) => {
+// Delete player
+router.route('/:id').delete((req, res, next) => {
     playerSchema.findByIdAndRemove(req.params.id, (error, data) => {
         if (error) {
             return next(error);

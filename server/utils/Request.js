@@ -30,11 +30,17 @@ class DbConnect {
         }
 
         if (normalizedQueries.sort) {
-            query.sort(normalizedQueries.sort);
+            for (const sortElement of normalizedQueries.sort) {
+                query.sort(sortElement);
+            }
         }
 
         if (normalizedQueries.top) {
             query.limit(normalizedQueries.top);
+        }
+
+        if (normalizedQueries.expand) {
+            query.populate(normalizedQueries.expand)
         }
 
         return new Promise((resolve, reject) => {

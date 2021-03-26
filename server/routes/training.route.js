@@ -9,8 +9,8 @@ const {
 let trainingSchema = require('../models/Training');
 const Request = require('../utils/Request');
 let model = new Request(trainingSchema);
-// CREATE Student
-router.route('/create-training').post((req, res, next) => {
+// CREATE trainings
+router.route('/').post((req, res, next) => {
     trainingSchema.create(req.body, (error, data) => {
         if (error) {
             return next(error)
@@ -21,11 +21,8 @@ router.route('/create-training').post((req, res, next) => {
     })
 });
 
-// READ Students
+// READ trainings
 router.route('/').get(async (req, res) => {
-    // let find = parseQuery(req.query);
-    // request.operation(trainingSchema);
-    // model.operation(this, "find").applyQuery(req.query)
     try {
         let data = await model.applyQuery(trainingSchema.find({}), req.query);
         res.json(data);
@@ -35,8 +32,8 @@ router.route('/').get(async (req, res) => {
 
 })
 
-// Get Single Student
-router.route('/edit-training/:id').get((req, res) => {
+// Get Single training
+router.route('/:id').get((req, res) => {
     trainingSchema.findById(req.params.id, (error, data) => {
         if (error) {
             return next(error)
@@ -47,23 +44,21 @@ router.route('/edit-training/:id').get((req, res) => {
 })
 
 
-// Update Student
-router.route('/update-training/:id').put((req, res, next) => {
+// Update training
+router.route('/:id').put((req, res, next) => {
     trainingSchema.findByIdAndUpdate(req.params.id, {
         $set: req.body
     }, (error, data) => {
         if (error) {
             return next(error);
-            console.log(error)
         } else {
             res.json(data)
-            console.log('Student updated successfully !')
         }
     })
 })
 
-// Delete Student
-router.route('/delete-training/:id').delete((req, res, next) => {
+// Delete trainings
+router.route('/:id').delete((req, res, next) => {
     trainingSchema.findByIdAndRemove(req.params.id, (error, data) => {
         if (error) {
             return next(error);
