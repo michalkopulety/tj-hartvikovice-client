@@ -6,6 +6,8 @@ Heroku: [dashboard.heroku](https://dashboard.heroku.com/apps/hartal-portal/)
 
 MongoDB: [MongoDB Atlas](https://cloud.mongodb.com/v2/605c3a93b1bc6f79e868f2da#clusters)
 
+Auth0: [Dashboard](https://manage.auth0.com/dashboard/eu/hartal/)
+
 ## API
 
 ### Endpoints
