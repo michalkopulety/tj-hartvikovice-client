@@ -19,12 +19,14 @@ export const client = async (path, {
     filter,
     expand,
     sort,
+    top,
     ...customConfig
 }) => {
     let url = getPath(path, {
         filter,
         expand,
-        sort
+        sort,
+        top
     });
 
     const config = {

@@ -35,7 +35,7 @@ export default function CreateTraining() {
       ).slice(-2)}`,
       players: present,
     };
-    await client("api/trainings/create-training", { body });
+    await client("api/trainings", { body });
     history.push("/trainings");
   };
 

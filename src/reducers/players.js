@@ -5,11 +5,28 @@ import {
 import {
   client
 } from '../utils/fetch';
+import {
+  Sort,
+  SortType
+} from '../utils/query/index';
 
 export const getPlayers = createAsyncThunk(
   "players/getPlayers",
   async () => {
-    let response = await client("api/players", {});
+    let response = await client("api/players", {
+      sort: new Sort({
+        sorts: [
+          new Sort({
+            property: "surname",
+            type: SortType.ASCENDING
+          }),
+          new Sort({
+            property: "firstname",
+            type: SortType.ASCENDING
+          })
+        ]
+      })
+    });
     let playerIds = response.map(player => player._id);
     let players = response.reduce((acc, player) => {
       return {
@@ -27,7 +44,7 @@ export const getPlayers = createAsyncThunk(
 export const getPlayerById = createAsyncThunk(
   "players/getPlayerById",
   async (id) => {
-    let response = await client(`api/players/edit-player/${id}`, {});
+    let response = await client(`api/players/${id}`, {});
     return {
       player: response,
       id: response._id

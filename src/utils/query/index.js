@@ -1,20 +1,35 @@
-import { Filter, FilterOperator } from "./Filter";
-import { Expand } from "./Expand";
-import { Sort, SortType } from "./Sort";
+import {
+    Filter,
+    FilterOperator
+} from "./Filter";
+import {
+    Expand
+} from "./Expand";
+import {
+    Sort,
+    SortType
+} from "./Sort";
 
-export const createQuery = ({filter, expand, select, sort}) => {
+export const createQuery = ({
+    filter,
+    expand,
+    select,
+    sort,
+    top
+}) => {
     return [
-        filter ? `$filter=${filter.toQueryString()}` : "",
-        expand ? `$expand=${expand.toQueryString()}` : "",
-        select ? `$select=${select.toQueryString()}` : "",
-        sort ? `$sort=${sort.toQueryString()}` : ""
-    ].filter(part => part)
-    .join("&");
+            filter ? `$filter=${filter.toQueryString()}` : "",
+            expand ? `$expand=${expand.toQueryString()}` : "",
+            select ? `$select=${select.toQueryString()}` : "",
+            sort ? `$sort=${sort.toQueryString()}` : "",
+            top ? `$top=${top}` : ""
+        ].filter(part => part)
+        .join("&");
 };
 
 export const getPath = (path, queryParams) => {
     let query = createQuery(queryParams);
-    return query ? `http://localhost:4000/${path}?${query}` : `http://localhost:4000/${path}`;
+    return query ? `/${path}?${query}` : `/${path}`;
 };
 
 export {
