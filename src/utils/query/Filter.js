@@ -1,12 +1,16 @@
-import { tr } from "date-fns/locale";
-
 export const FilterOperator = {
     "LTE": "$lte",
     "GTE": "$gte"
 };
 
 export class Filter {
-    constructor({property, operator, value, filters, and}) {
+    constructor({
+        property,
+        operator,
+        value,
+        filters,
+        and
+    }) {
         this.property = property;
         this.operator = operator;
         this.value = value;
@@ -24,5 +28,5 @@ export class Filter {
         }
 
         return query;
-    } 
+    }
 }

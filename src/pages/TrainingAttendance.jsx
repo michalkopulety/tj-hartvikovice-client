@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TrainingAttendance() {
-  const today = new Date();
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();

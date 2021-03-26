@@ -20,13 +20,9 @@ const useStyles = makeStyles({
 
 export default function AttendanceList({ trainingAttendance }) {
   const classes = useStyles();
-  const {
-    isFetching,
-    players,
-    playerIDs,
-    trainings,
-    trainingIDs,
-  } = useSelector((state) => state.trainingAttendance);
+  const { players, playerIDs, trainings, trainingIDs } = useSelector(
+    (state) => state.trainingAttendance
+  );
 
   return (
     <TableContainer component={Paper}>
