@@ -5,6 +5,8 @@ queryParser.prepareValue = (value) => {
     if (value.includes("Timestamp")) {
         let a = value.split(/[()]/)[1];
         return new Date(parseInt(a));
+    } else {
+        return value.split(/['']/)[1];
     }
 };
 
@@ -21,15 +23,27 @@ queryParser.getFilters = (filters) => {
                 value: queryParser.prepareValue(value)
             };
         });
-        filter.$and = filterObjects.map((a) => {
-            return {
-                [a.property]: {
-                    [a.operator]: a.value
+
+        if (filterObjects.length === 1) {
+            filter = {
+                [filterObjects[0].property]: {
+                    [filterObjects[0].operator]: filterObjects[0].value
                 }
-            };
-        })
+            }
+        } else {
+            filter.$and = filterObjects.map((a) => {
+                return {
+                    [a.property]: {
+                        [a.operator]: a.value
+                    }
+                };
+            })
+        }
+
     }
-    return filter;
+    return {
+        filter: filter
+    };
 };
 
 queryParser.getSelect = (select) => {

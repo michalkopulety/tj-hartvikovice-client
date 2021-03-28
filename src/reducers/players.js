@@ -6,14 +6,16 @@ import {
   client
 } from '../utils/fetch';
 import {
+  Filter,
+  FilterOperator,
   Sort,
   SortType
 } from '../utils/query/index';
 
 export const getPlayers = createAsyncThunk(
   "players/getPlayers",
-  async () => {
-    let response = await client("api/players", {
+  async (team) => {
+    let query = {
       sort: new Sort({
         sorts: [
           new Sort({
@@ -26,7 +28,16 @@ export const getPlayers = createAsyncThunk(
           })
         ]
       })
-    });
+    };
+    if (team) {
+      query.filter = new Filter({
+        property: "Team",
+        operator: FilterOperator.EQ,
+        value: team
+      });
+    }
+
+    let response = await client("api/players", query);
     let playerIds = response.map(player => player._id);
     let players = response.reduce((acc, player) => {
       return {
@@ -56,12 +67,17 @@ const counterSlice = createSlice({
   name: 'players',
   initialState: {
     isFetching: true,
+    team: "A",
     players: {},
     playerIds: [],
     playersBirthdays: [],
     playersNamedays: []
   },
-  reducers: {},
+  reducers: {
+    setTeam(state, action) {
+      state.team = action.payload;
+    }
+  },
   extraReducers: {
     [getPlayers.fulfilled]: (state, action) => {
       state.isFetching = false;
@@ -79,5 +95,9 @@ const counterSlice = createSlice({
     },
   },
 })
+
+export const {
+  setTeam
+} = counterSlice.actions;
 
 export default counterSlice.reducer

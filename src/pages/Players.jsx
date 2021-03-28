@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { getPlayers } from "../reducers/players";
+import { getPlayers, setTeam } from "../reducers/players";
 import { useDispatch, useSelector } from "react-redux";
 import PlayerCard from "../components/playerCard/PlayerCard";
+import TeamSelection from "../components/teamSelection/TeamSelection";
 import { Grid, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -22,17 +23,23 @@ const useStyles = makeStyles((theme) => ({
 export default function Players() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { isFetching, playerIds } = useSelector((state) => state.players);
+  const { isFetching, team, playerIds } = useSelector((state) => state.players);
+  const onTeamChange = (value) => {
+    dispatch(setTeam(value.target.value));
+  };
 
   useEffect(() => {
-    dispatch(getPlayers());
-  }, [dispatch]);
+    dispatch(getPlayers(team));
+  }, [dispatch, team]);
 
   return (
     !isFetching && (
       <>
         <Grid item xs={12}>
           <Typography variant="h1">Seznam hráčů</Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TeamSelection value={team} onChange={onTeamChange} />
         </Grid>
         <Grid item xs={12}>
           <Grid container className={classes.root} spacing={2}>

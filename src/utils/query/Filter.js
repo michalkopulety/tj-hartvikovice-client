@@ -1,4 +1,5 @@
 export const FilterOperator = {
+    "EQ": "$eq",
     "LTE": "$lte",
     "GTE": "$gte"
 };
@@ -24,7 +25,7 @@ export class Filter {
         if (this.filters) {
             query = this.filters.map(filter => filter.toQueryString()).join(this.and ? " and " : " or ");
         } else {
-            query = `${this.property} ${this.operator} ${this.value}`
+            query = `${this.property} ${this.operator} '${this.value}'`
         }
 
         return query;
