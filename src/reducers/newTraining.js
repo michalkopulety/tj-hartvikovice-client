@@ -51,6 +51,7 @@ const counterSlice = createSlice({
     checked: [],
     place: "",
     weather: "",
+    team: "A",
     date: new Date().getTime(),
     time: new Date().getTime()
   },
@@ -75,6 +76,9 @@ const counterSlice = createSlice({
     },
     setTime(state, action) {
       state.time = action.payload;
+    },
+    setTeam(state, action) {
+      state.team = action.payload;
     }
   },
   extraReducers: {
@@ -82,6 +86,7 @@ const counterSlice = createSlice({
       state.isFetching = false;
       state.players = action.payload.players;
       state.absent = action.payload.playerIds;
+      state.present = [];
     },
   },
 })
@@ -92,7 +97,8 @@ export const {
   setPlace,
   setWeather,
   setDate,
-  setTime
+  setTime,
+  setTeam
 } = counterSlice.actions;
 
 export default counterSlice.reducer

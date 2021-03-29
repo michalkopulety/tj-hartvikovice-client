@@ -36,13 +36,13 @@ function intersection(a, b) {
 
 export default function TransferList() {
   const dispatch = useDispatch();
-  const { absent, present, checked } = useSelector(
+  const { absent, present, checked, team } = useSelector(
     (state) => state.newTraining
   );
 
   useEffect(() => {
-    dispatch(getPlayers());
-  }, [dispatch]);
+    dispatch(getPlayers(team));
+  }, [dispatch, team]);
   const classes = useStyles();
 
   const leftChecked = intersection(checked, absent);

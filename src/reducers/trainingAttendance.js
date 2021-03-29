@@ -80,6 +80,11 @@ export const getAttendance = createAsyncThunk(
               property: "date",
               operator: FilterOperator.LTE,
               value: `Timestamp(${toTimestamp})`
+            }),
+            new Filter({
+              property: "team",
+              operator: FilterOperator.EQ,
+              value: team
             })
           ]
         })

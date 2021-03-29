@@ -9,7 +9,8 @@ let trainingSchema = new Schema({
     players: [{
         type: Schema.Types.ObjectId,
         ref: 'Player'
-    }]
+    }],
+    team: String
 }, {
     collection: 'trainings'
 });

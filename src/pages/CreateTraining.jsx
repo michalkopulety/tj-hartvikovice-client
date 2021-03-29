@@ -22,7 +22,7 @@ export default function CreateTraining() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const { isFetching, place, weather, date, time, present } = useSelector(
+  const { isFetching, place, weather, date, time, present, team } = useSelector(
     (state) => state.newTraining
   );
   const createTraining = async (e) => {
@@ -34,6 +34,7 @@ export default function CreateTraining() {
         "0" + new Date(time).getMinutes()
       ).slice(-2)}`,
       players: present,
+      team: team,
     };
     await client("api/trainings", { body });
     history.push("/trainings");
