@@ -9,7 +9,7 @@ import PlayerDetail from "./pages/PlayerDetail";
 import TrainingAttendance from "./pages/TrainingAttendance";
 import BirthDayList from "./pages/BirthdayList";
 import CreateTraining from "./pages/CreateTraining";
-// import ProtectedRoute from "./auth/ProtectedRoute";
+import RoleBasedAccessRoute from "./auth/RoleBasedAccessRoute";
 
 const Navigation = () => {
   const { isLoading, error } = useAuth0();
@@ -25,7 +25,11 @@ const Navigation = () => {
   return (
     <Switch>
       <Route path="/" exact component={Home} />
-      <Route path="/players" component={Players} />
+      <RoleBasedAccessRoute
+        path="/players"
+        requiredActions="read:players"
+        component={Players}
+      />
       <Route path="/player/:id" component={PlayerDetail} />
       <Route path="/trainings" exact component={TrainingAttendance} />
       <Route path="/trainings/create" component={CreateTraining} />

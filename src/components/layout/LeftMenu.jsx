@@ -13,6 +13,41 @@ import {
 import { ChevronLeft, People, EventAvailable, Cake } from "@material-ui/icons";
 import { closeLeftPanel } from "../../reducers/layout";
 import { useDispatch, useSelector } from "react-redux";
+import RoleBasedAccessComponent from "../../auth/RoleBasedAccessComponent";
+
+const menuItems = [
+  {
+    path: "/players",
+    icon: <People />,
+    text: "Players",
+    requiredActions: "read:players",
+  },
+  {
+    path: "/trainings",
+    icon: <EventAvailable />,
+    text: "Attendance",
+    requiredActions: "read:players",
+  },
+  {
+    path: "/birthdays",
+    icon: <Cake />,
+    text: "Birthday",
+    requiredActions: "read:players",
+  },
+];
+
+const MenuItem = (onNavigationClick, icon, text, path) => {
+  return (
+    <ListItem
+      button
+      onClick={() => {
+        onNavigationClick(path);
+      }}>
+      <ListItemIcon>{icon}</ListItemIcon>
+      <ListItemText primary={text} />
+    </ListItem>
+  );
+};
 
 export default function LeftMenu({ classes }) {
   const history = useHistory();
@@ -42,36 +77,17 @@ export default function LeftMenu({ classes }) {
       </div>
       <Divider />
       <List>
-        <ListItem
-          button
-          onClick={() => {
-            onNavigationClick("/players");
-          }}>
-          <ListItemIcon>
-            <People />
-          </ListItemIcon>
-          <ListItemText primary="Players" />
-        </ListItem>
-        <ListItem
-          button
-          onClick={() => {
-            onNavigationClick("/trainings");
-          }}>
-          <ListItemIcon>
-            <EventAvailable />
-          </ListItemIcon>
-          <ListItemText primary="Attendance" />
-        </ListItem>
-        <ListItem
-          button
-          onClick={() => {
-            onNavigationClick("/birthdays");
-          }}>
-          <ListItemIcon>
-            <Cake />
-          </ListItemIcon>
-          <ListItemText primary="Birthday" />
-        </ListItem>
+        {menuItems.map((item) => (
+          <RoleBasedAccessComponent
+            component={MenuItem(
+              onNavigationClick,
+              item.icon,
+              item.text,
+              item.path
+            )}
+            requiredActions="read:players"
+          />
+        ))}
       </List>
       <Divider />
     </Drawer>
