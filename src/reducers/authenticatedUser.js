@@ -1,24 +1,32 @@
-import { createSlice } from '@reduxjs/toolkit'
+import {
+  createSlice
+} from '@reduxjs/toolkit'
 
 const initialState = {
   isAuthenticated: false,
-  user: null
+  user: undefined,
+  token: undefined
 };
 
 const counterSlice = createSlice({
   name: 'authentication',
   initialState,
   reducers: {
-    logIn(state, user) {
-      state.isAuthenticated = true;
-      state.user = user;
+    setUser(state, action) {
+      state.user = action.payload;
     },
-    logOut(state) {
-      state.isAuthenticated = false;
-      state.user = null;
+    setIsAuthenticated(state, action) {
+      state.isAuthenticated = action.payload;
+    },
+    setAuthenticationToken(state, action) {
+      state.token = action.payload;
     }
   },
 })
 
-export const { logIn, logOut } = counterSlice.actions
+export const {
+  setUser,
+  setIsAuthenticated,
+  setAuthenticationToken
+} = counterSlice.actions
 export default counterSlice.reducer

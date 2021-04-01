@@ -1,10 +1,10 @@
 import React from "react";
 import AuthneticatedUser from "./Authneticated/AuthneticatedUser";
 import UnauthenticatedUser from "./Unauthenticated/UnauthenticatedUser";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useSelector } from "react-redux";
 
 const AuthNav = () => {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated } = useSelector((state) => state.authenticatedUser);
 
   return isAuthenticated ? <AuthneticatedUser /> : <UnauthenticatedUser />;
 };

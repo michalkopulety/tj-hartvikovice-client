@@ -1,14 +1,20 @@
 import { Avatar } from "@material-ui/core";
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useSelector } from "react-redux";
 
 const AuthNav = () => {
-  const { user } = useAuth0();
-  let initials = `${user.given_name[0]}${user.family_name[0]}`;
+  const { user } = useSelector((state) => state.authenticatedUser);
+  // let initials = `${user.given_name[0]}${user.family_name[0]}`;
 
-  return user.picture ? 
-    (<Avatar alt={user.name} src={user.picture} button/>) :
-    (<Avatar alt={user.name} button>{initials}</Avatar>)
+  return user ? (
+    user.picture ? (
+      <Avatar alt={user.name} src={user.picture} button />
+    ) : (
+      <Avatar alt={user.name} button>
+        MK
+      </Avatar>
+    )
+  ) : null;
 };
 
 export default AuthNav;

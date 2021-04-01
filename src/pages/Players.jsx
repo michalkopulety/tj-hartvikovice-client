@@ -23,14 +23,23 @@ const useStyles = makeStyles((theme) => ({
 export default function Players() {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const { isFetching, team, playerIds } = useSelector((state) => state.players);
+  const { token } = useSelector((state) => state.authenticatedUser);
+
   const onTeamChange = (value) => {
     dispatch(setTeam(value.target.value));
   };
 
   useEffect(() => {
-    dispatch(getPlayers(team));
-  }, [dispatch, team]);
+    (async () => {
+      try {
+        token && dispatch(getPlayers([team, token]));
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, [dispatch, team, token]);
 
   return (
     !isFetching && (

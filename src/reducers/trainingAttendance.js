@@ -41,7 +41,7 @@ const addDaysToDate = (date, days) => {
 
 export const getAttendance = createAsyncThunk(
   "trainingAttendance/getAttendance",
-  async ([fromTimestamp, toTimestamp, team]) => {
+  async ([fromTimestamp, toTimestamp, team, token]) => {
     let playerQuery = {
       expand: new Expand(["trainings"]),
       sort: new Sort({
@@ -65,6 +65,7 @@ export const getAttendance = createAsyncThunk(
         value: team
       });
     }
+    playerQuery.token = token;
 
     let [players, trainings] = await Promise.all([
       getPlayers(playerQuery),
@@ -87,7 +88,8 @@ export const getAttendance = createAsyncThunk(
               value: team
             })
           ]
-        })
+        }),
+        token: token
       })
     ]);
     let playerIDs = players.map(player => player._id);

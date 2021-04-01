@@ -1,0 +1,6 @@
+{
+    "domain": "hartal.eu.auth0.com",
+    "clientId": "siArM7oh2aDjNlCe4muCRhNFZoboY7Wt",
+    "audience": "https://hartal-portal.herokuapp.com/api",
+    "scope": "read:players read:trainings create:trainings create:players"
+  }

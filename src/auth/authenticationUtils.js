@@ -1,7 +1,9 @@
 import {
     getConfig
 } from "../config";
-import rules from './rbac-rules';
+import {
+    PREDEFINED_ROLES
+} from "./rbac-rules";
 
 export function hasUserRequiredPermissions(user, requiredActions) {
     const workspace = getConfig().audience + "/roles";
@@ -9,7 +11,7 @@ export function hasUserRequiredPermissions(user, requiredActions) {
     if (user) {
         const roles = user[workspace];
         const permissions = roles.reduce((acc, role) => {
-            return rules[role] ? acc.concat(rules[role]) : acc;
+            return PREDEFINED_ROLES[role] ? acc.concat(PREDEFINED_ROLES[role]) : acc;
         }, []);
 
 

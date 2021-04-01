@@ -10,6 +10,8 @@ import AddIcon from "@material-ui/icons/Add";
 import DatePicker from "../components/datePicker/DatePicker";
 import AttendanceList from "../components/attendanceList/AttendanceList";
 import TeamSelection from "../components/teamSelection/TeamSelection";
+import RoleBasedAccessComponent from "../auth/RoleBasedAccessComponent";
+import { PREDEFINED_PERMISIONS } from "../auth/rbac-rules";
 
 const useStyles = makeStyles((theme) => ({
   createButton: {
@@ -22,23 +24,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const CreateNewTrainingButton = ({ onClick, classes }) => {
+  return (
+    <Fab
+      className={classes.createButton}
+      color="primary"
+      aria-label="Create new Training"
+      onClick={onClick}>
+      <AddIcon />
+    </Fab>
+  );
+};
+
 export default function TrainingAttendance() {
   const classes = useStyles();
   const history = useHistory();
+  const onCreateNewTrainingClick = () => {
+    history.push(`/trainings/create`);
+  };
   const dispatch = useDispatch();
   const { isFetching, from, to, team } = useSelector(
     (state) => state.trainingAttendance
   );
-  const onCreateNewTrainingClick = () => {
-    history.push(`/trainings/create`);
-  };
+  const { token } = useSelector((state) => state.authenticatedUser);
+
   const onTeamChange = (event) => {
     dispatch(setTeam(event.target.value));
   };
 
   useEffect(() => {
-    dispatch(getAttendance([from, to, team]));
-  }, [dispatch, from, to, team]);
+    token && dispatch(getAttendance([from, to, team, token]));
+  }, [dispatch, from, to, team, token]);
 
   return (
     !isFetching && (
@@ -76,13 +92,15 @@ export default function TrainingAttendance() {
             <AttendanceList />
           </Grid>
         </Grid>
-        <Fab
-          className={classes.createButton}
-          color="primary"
-          aria-label="Create new Training"
-          onClick={onCreateNewTrainingClick}>
-          <AddIcon />
-        </Fab>
+        <RoleBasedAccessComponent
+          component={
+            <CreateNewTrainingButton
+              onClick={onCreateNewTrainingClick}
+              classes={classes}
+            />
+          }
+          requiredActions={PREDEFINED_PERMISIONS.TRAININGS.CREATE}
+        />
       </>
     )
   );

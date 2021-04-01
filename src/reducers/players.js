@@ -1,53 +1,44 @@
-import {
-  createSlice,
-  createAsyncThunk
-} from '@reduxjs/toolkit'
-import {
-  client
-} from '../utils/fetch';
-import {
-  Filter,
-  FilterOperator,
-  Sort,
-  SortType
-} from '../utils/query/index';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { client } from "../utils/fetch";
+import { Filter, FilterOperator, Sort, SortType } from "../utils/query/index";
 
 export const getPlayers = createAsyncThunk(
   "players/getPlayers",
-  async (team) => {
+  async ([team, token]) => {
     let query = {
       sort: new Sort({
         sorts: [
           new Sort({
             property: "surname",
-            type: SortType.ASCENDING
+            type: SortType.ASCENDING,
           }),
           new Sort({
             property: "firstname",
-            type: SortType.ASCENDING
-          })
-        ]
-      })
+            type: SortType.ASCENDING,
+          }),
+        ],
+      }),
     };
     if (team) {
       query.filter = new Filter({
         property: "Team",
         operator: FilterOperator.EQ,
-        value: team
+        value: team,
       });
     }
+    query.token = token;
 
     let response = await client("api/players", query);
-    let playerIds = response.map(player => player._id);
+    let playerIds = response.map((player) => player._id);
     let players = response.reduce((acc, player) => {
       return {
         [player._id]: player,
-        ...acc
+        ...acc,
       };
-    }, {})
+    }, {});
     return {
       playerIds,
-      players
+      players,
     };
   }
 );
@@ -58,25 +49,25 @@ export const getPlayerById = createAsyncThunk(
     let response = await client(`api/players/${id}`, {});
     return {
       player: response,
-      id: response._id
+      id: response._id,
     };
   }
 );
 
 const counterSlice = createSlice({
-  name: 'players',
+  name: "players",
   initialState: {
     isFetching: true,
     team: "A",
     players: {},
     playerIds: [],
     playersBirthdays: [],
-    playersNamedays: []
+    playersNamedays: [],
   },
   reducers: {
     setTeam(state, action) {
       state.team = action.payload;
-    }
+    },
   },
   extraReducers: {
     [getPlayers.fulfilled]: (state, action) => {
@@ -89,15 +80,15 @@ const counterSlice = createSlice({
       state.isFetching = false;
       state.players = {
         [id]: action.payload.player,
-        ...state.players
+        ...state.players,
       };
-      state.playerIds = state.playerIds.includes(id) ? [...state.playerIds] : [id, ...state.playerIds];
+      state.playerIds = state.playerIds.includes(id)
+        ? [...state.playerIds]
+        : [id, ...state.playerIds];
     },
   },
-})
+});
 
-export const {
-  setTeam
-} = counterSlice.actions;
+export const { setTeam } = counterSlice.actions;
 
-export default counterSlice.reducer
+export default counterSlice.reducer;

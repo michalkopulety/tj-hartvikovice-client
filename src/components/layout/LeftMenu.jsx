@@ -14,25 +14,25 @@ import { ChevronLeft, People, EventAvailable, Cake } from "@material-ui/icons";
 import { closeLeftPanel } from "../../reducers/layout";
 import { useDispatch, useSelector } from "react-redux";
 import RoleBasedAccessComponent from "../../auth/RoleBasedAccessComponent";
-
+import { PREDEFINED_PERMISIONS } from "../../auth/rbac-rules";
 const menuItems = [
   {
     path: "/players",
     icon: <People />,
     text: "Players",
-    requiredActions: "read:players",
+    requiredActions: PREDEFINED_PERMISIONS.PLAYERS.READ,
   },
   {
     path: "/trainings",
     icon: <EventAvailable />,
     text: "Attendance",
-    requiredActions: "read:players",
+    requiredActions: PREDEFINED_PERMISIONS.TRAININGS.READ,
   },
   {
     path: "/birthdays",
     icon: <Cake />,
     text: "Birthday",
-    requiredActions: "read:players",
+    requiredActions: PREDEFINED_PERMISIONS.PLAYERS.READ,
   },
 ];
 
@@ -85,7 +85,7 @@ export default function LeftMenu({ classes }) {
               item.text,
               item.path
             )}
-            requiredActions="read:players"
+            requiredActions={item.requiredActions}
           />
         ))}
       </List>

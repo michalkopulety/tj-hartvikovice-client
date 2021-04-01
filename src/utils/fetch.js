@@ -15,6 +15,7 @@ export const getTrainings = async (params) => {
 };
 
 export const client = async (path, {
+    token,
     body,
     filter,
     expand,
@@ -37,6 +38,10 @@ export const client = async (path, {
         },
         ...customConfig
     };
+
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+    }
 
     if (body) {
         config.body = JSON.stringify(body);
