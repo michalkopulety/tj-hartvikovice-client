@@ -1,6 +1,8 @@
-let mongoose = require('mongoose'),
-    express = require('express'),
-    router = express.Router();
+const express = require('express');
+const router = express.Router();
+const checkJwt = require("../authentication/auth.middleware");
+const permissionsCheck = require("../authentication/permissions.middleware");
+const roles = require("../authentication/rolesConstants");
 
 const {
     query
@@ -9,28 +11,34 @@ const {
 let trainingSchema = require('../models/Training');
 const Request = require('../utils/Request');
 let model = new Request(trainingSchema);
+
+router.use(checkJwt);
+
 // CREATE trainings
-router.route('/').post((req, res, next) => {
-    trainingSchema.create(req.body, (error, data) => {
-        if (error) {
-            return next(error)
-        } else {
-            console.log(data)
-            res.json(data)
-        }
-    })
-});
+router.route('/').post(
+    permissionsCheck(roles.TRAININGS.CREATE),
+    (req, res, next) => {
+        trainingSchema.create(req.body, (error, data) => {
+            if (error) {
+                return next(error)
+            } else {
+                console.log(data)
+                res.json(data)
+            }
+        })
+    });
 
 // READ trainings
-router.route('/').get(async (req, res) => {
-    try {
-        let data = await model.applyQuery(trainingSchema.find({}), req.query);
-        res.json(data);
-    } catch (err) {
-        return next(err);
-    }
-
-})
+router.route('/').get(
+    permissionsCheck(roles.TRAININGS.READ),
+    async (req, res, next) => {
+        try {
+            let data = await model.applyQuery(trainingSchema.find({}), req.query);
+            res.json(data);
+        } catch (err) {
+            return next(err);
+        }
+    });
 
 // Get Single training
 router.route('/:id').get((req, res) => {
